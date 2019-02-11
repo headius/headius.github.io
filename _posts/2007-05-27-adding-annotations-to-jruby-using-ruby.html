@@ -1,0 +1,12 @@
+---
+layout: post
+title: Adding Annotations to JRuby Using Ruby
+date: '2007-05-27T17:10:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:32.830-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-1659853267171023582
+blogger_orig_url: http://blog.headius.com/2007/05/adding-annotations-to-jruby-using-ruby.html
+---
+
+I love how meta-programmable Ruby is.<br /><br />JRuby doesn't support annotations because Ruby doesn't support annotations. So what! We can extend Ruby to add something like annotations:<br /><pre><br />class JPABean<br />def self.inherited(clazz)<br />  @@annotations = {}<br />end<br />def self.anno(annotation)<br />  @@last_annotation = annotation<br />end<br /><br />def self.method_added(sym)<br />  @@annotations[sym] = @@last_annotation<br />end<br /><br />def self.get_annotation(sym)<br />  return @@annotations[sym]<br />end<br />end<span style="font-family:Georgia,serif;"><br /></span></pre>Given this, we can do things like the following:<br /><pre><br />class MyBean :sql =&gt; "SELECT * FROM stuff WHERE name = 'foo'"<br />def foo; end<br /><br />anno :field =&gt; :hello_id<br />attr :hello<br /><br />anno :field =&gt; :bar_in_table<br />attr_accessor :bar<br />end<span style="font-family:Georgia,serif;"><br /></span></pre>And here's some output from the resulting class:<br /><pre><br />p MyBean.get_annotation(:foo)<br />p MyBean.get_annotation(:hello)<br />p MyBean.get_annotation(:bar=)<br /><br />=&gt;<br /><br />{:sql=&gt;"SELECT * FROM stuff WHERE name = 'foo'"}<br />{:field=&gt;:hello_id}<br />{:field=&gt;:bar_in_table}<span style="font-family:Georgia,serif;"><br /></span></pre>So as you can see we really do have all the necessary requirements to annotate classes. Now what if we just had MyBean be a java.lang.Object extension and stuffed the annotations into the resulting generated class?  We can already create real Java classes in this way, but with the above syntax and a little magic in the JRuby Java integration later, we've got annotation support in on Java classes too.  This should enable things like Hibernate, JPA, and JUnit 4 to work with JRuby's Ruby-based classes. Or at least, I believe it to be possible. It just requires a little work to add annotation information to the resulting generated classes.<br /><br />I've planted the seed here and on the JRuby dev list...let's see if it germinates.

@@ -1,0 +1,12 @@
+---
+layout: post
+title: GlassFish Gem Build Instructions
+date: '2007-11-21T16:26:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:32.244-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-8269685111719502860
+blogger_orig_url: http://blog.headius.com/2007/11/glassfish-gem-build-instructions.html
+---
+
+Hopefully by now you've heard about the GlassFish Gem. It's a roughly 3MB gem that includes only the pieces of GlassFish necessary to launch a production JRuby on Rails server. Instead of using WAR deployment, you just run "glassfish_rails" and point at your Rails dir. The result is a multi-request production-ready server.<br /><br />But there are things that could be improved. It deploys apps under a subcontext, rather than at the root context. It doesn't appear to route static content correctly. It doesn't provide options for configuring the deployed app, like for connection pools, number of JRuby runtime to spin up, and so on. Basically, it needs people to try it out and provide improvement suggestions.<br /><br />Now you can <a href="http://weblogs.java.net/blog/arungupta/archive/2007/11/totd_18_how_to.html">build the GlassFish Gem yourself</a> Arun has provided step-by-step instructions on how to get all the necessary files and generate your own GlassFish Gem. I believe this could be the best way to deploy JRuby on Rails apps for both production and development use, so I really hope you'll give it a try and offer suggestions and patches back to the <a href="https://glassfish.dev.java.net/">GlassFish</a> team (or funnel them through me if you like).

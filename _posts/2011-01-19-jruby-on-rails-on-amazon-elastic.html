@@ -1,0 +1,12 @@
+---
+layout: post
+title: JRuby on Rails on Amazon Elastic Beanstalk
+date: '2011-01-19T12:31:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:30.183-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-8236105658793522179
+blogger_orig_url: http://blog.headius.com/2011/01/jruby-on-rails-on-amazon-elastic.html
+---
+
+Amazon this week announced <a href="http://aws.amazon.com/elasticbeanstalk/">Elastic Beanstalk</a>, a managed <a href="http://tomcat.apache.org/">Apache Tomcat</a> service for AWS. Naturally, I had to try JRuby on it.<div><br /></div><div>First, the bad:</div><div><ul><li>AWSEB is really slow to deploy stuff. Several times it got "stuck" and I waited for more than 30 minutes for it to recover. It did not appear to be an app issue, since the app came up just fine.</li><li>The default instance size is t1.micro. I was able to get a Rails app to boot there, but it's a very underpowered size.</li><li>It appears to start up JVMs with 256MB of memory max and 64MB of permgen. For a larger app, or one with many Rails instances, that might not be enough. For a "threadsafe" Rails app, though, it's plenty.</li><li>The default EC2 load balancer for the new Beanstalk instance is set to ping the "/" URL. If you don't rig up a / route in your Rails app (like I forgot to do) the app will come up for a few minutes and immediately get taken out.</li></ul><div>And the good news: it works great once you get past the hassles! Here's the process that worked for my app (assuming app is already build and ready for deploy).</div></div><div><br /></div><div>Preparing the app:</div><div><ul><li>Ensure jruby-openssl is in Gemfile. Rails seems to want it in production mode.</li><li>Edit config/environments/production.rb to enable threadsafe mode.</li><li>`warble`</li></ul><div>Preparing Elastic Beanstalk:</div></div><div><ul><li>Create a new instance, specifying the .war file Warbler created above as the app to deploy</li><li>There is no step two</li></ul><div>Once the instance has been prepared, you may want to resize it to something larger than t1.micro if it's meant to be a real app...but it should boot ok.</div></div><div><br /><div><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://i.min.us/ieh0Hc.png"><img style="margin:0 10px 10px 0;cursor:pointer; cursor:hand;width: 452px; height: 420px;" src="http://i.min.us/ieh0Hc.png" border="0" alt="" /></a><br /></div><br /></div><div>Have fun!</div>

@@ -1,0 +1,12 @@
+---
+layout: post
+title: 'Project Idea: Native JSON Gem for JRuby'
+date: '2007-12-22T04:43:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:32.018-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-766320416406520756
+blogger_orig_url: http://blog.headius.com/2007/12/project-idea-native-json-gem-for-jruby.html
+---
+
+<a href="http://jroller.com/aalmiray/entry/json_lib_2_2_released">json-lib 2.2 has been released</a> by Andres Almiray, and he boldly claims that "it now has become the most complete JSON parsing library". It supports Java, Groovy, and JRuby quite well, and Andres has an <a href="http://json-lib.sourceforge.net/snippets.html">extensive set of json-lib examples</a> to get you started.<br /><br />But this post is about a project idea for anyone interested in tackling it: make a JRuby-compatible version of the <a href="http://rubyforge.org/projects/json/">fast JSON library from Florian Frank</a> using Andres's json-lib (or another library of your choosing, if it's as "complete" as json-lib).<br /><br />JSON is being used more and more for remoting, not just for AJAX but for RESTful APIs as well. Rails 2.0 supports REST APIs using either XML or JSON (or YAML, I believe), and many shops are settling on JSON.<br /><br />So there's a possibility this could be a bottleneck for JRuby unless we have a fast native JSON library. There's json-pure, also from Florian Frank, which is a pure Ruby version of the library...but that will never compete with a fast version in C or Java.<br /><br />Anyone up to the challenge? <a href="http://jira.codehaus.org/browse/JRUBY-1767">JRUBY-1767: JRuby needs a fast JSON library</a><br /><br /><span style="font-weight:bold;"><span style="font-style:italic;">Update:</span></span> Marcin tells me that Florian's JSON library uses Ragel, which may be an easier path to getting it up and running on JRuby. Hpricot and Mongrel also use Ragel, and both already have JRuby versions.

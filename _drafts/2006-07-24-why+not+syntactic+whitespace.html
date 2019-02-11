@@ -1,0 +1,11 @@
+---
+layout: post
+title: Why Not Syntactic Whitespace
+date: '2006-07-24T17:17:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:34.395-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-4110323764291378656
+---
+
+I figured out this weekend why Python's syntactically-significant whitespace bugs me so. I know folks say it makes code easier to read and forces some uniformity on developers, and that after a while you don't even notice it...but it's just never rubbed me the right way. I think I've boiled it down to a few key issues:<br /><br />1. It's unlike any other language in common use today. Other than newlines terminating a logical line of code in many languages, no other language puts so much emphasis on whitespace producing major lexical changes in code. ** Don't do weird shit nobody else does.<br />2. It's a barrier to entry for anyone coming to python from those other languages. I code on at least three different operating systems with perhaps five to seven different editors at different times. Sometimes they support tabification with spaces, sometimes not. Sometimes I'll edit a file in one editor on one OS and in another editor on another OS. Ultimately it is a barrier to me fitting python into my development routine to make sure all those platforms and editors are tabifying the same way. ** Don't make it hard to incorporate the language into developers' typical routine; some adjustment is necessary, but it shouldn't involve tweaking tabification for syntactic reasons.<br />3. It totally defies formatting. I can't take a mangled piece of python code and tell an editor to reformat it correctly based on logical scoping. If it's mangled, it's dead. That's absurd. ** File formatting is ALWAYS going to get mangled somewhere; don't make it a requirement for the language to run correctly.<br />4. The last reason, and this may be the biggest one: Python tries to force a particular coding/layout style on an extremely creative, artist<br /><br /><br />None of these are particular

@@ -1,0 +1,13 @@
+---
+layout: post
+title: JRuby on ME Devices?
+date: '2007-11-22T08:11:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:32.232-08:00'
+thumbnail: http://4.bp.blogspot.com/_HWobMsJuRHc/R0WrO3WtXSI/AAAAAAAAABE/S9BQLNFzw9w/s72-c/jruby_me.png
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-214504084278266060
+blogger_orig_url: http://blog.headius.com/2007/11/jruby-on-me-devices.html
+---
+
+Roy Hayun presented his "JRuby on ME" talk this past JavaOne and got a pretty solid response. He ported a pre-1.0 JRuby to CDC by incrementally stripping out libraries and functionality that couldn't be supported. He  succeeded, and yesterday delivered to us a buildable version of his JRubME 0.1 (that name was a typo on his original JavaOne submission...but the missing 'y' produced a comically good name).<br /><br /><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/_HWobMsJuRHc/R0WrO3WtXSI/AAAAAAAAABE/S9BQLNFzw9w/s1600-h/jruby_me.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;" src="http://4.bp.blogspot.com/_HWobMsJuRHc/R0WrO3WtXSI/AAAAAAAAABE/S9BQLNFzw9w/s400/jruby_me.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5135699221951634722" /></a><br />In the <a href="http://dist.codehaus.org/jruby/research/">JRuby download "research" area</a>, you can find the results of his work plus some docs and a short presentation on JRubyME. As near as I can tell he based it on JRuby 0.9.8. The same work could probably be done to produce a stripped version of current JRuby, and with a bit more work we could probably tweak and reconfigure the source to support ME execution as a normal build target. Both are exercises for you all until there's more time (or Ruby on ME becomes a primary goal rather than performance and compatibility on SE :) )<br /><br />There you go! You wanted JRuby on ME, now you have a damn good start! Run with it!

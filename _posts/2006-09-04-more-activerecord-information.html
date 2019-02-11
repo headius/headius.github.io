@@ -1,0 +1,12 @@
+---
+layout: post
+title: More ActiveRecord Information
+date: '2006-09-04T11:31:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:34.040-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-1019146445602441796
+blogger_orig_url: http://blog.headius.com/2006/09/more-activerecord-information.html
+---
+
+<span style="font-weight: bold;"></span><span style="font-weight: bold;">Supporting More Databases</span><br /><br />A number of folks have asked about support for database X. We want to support all possible databases, of course, and JDBC gives us a huge head start on that. Many databases will only need a bit of tweaking to support all the basic CRUD operations. The additional work...small though it may be...is implementing the schema-manipulating methods of ActiveRecord. Here's a complete list...if you can provide examples for each operation, it would speed our supporting them:<br /><ul><li>add_column</li><li>add_index</li><li>change_column</li><li>    change_column_default</li><li>columns</li><li>create_table</li><li>drop_table</li><li>initialize_schema_information</li><li>native_database_types</li><li>remove_column</li><li>remove_index</li><li>rename_column</li><li>rename_table</li><li>structure_dump</li><li>table_alias_for</li><li>table_alias_length</li></ul>Check available docs for ActiveRecord or look at the existing adapters in <a href="http://dev.rubyonrails.org/svn/rails/branches/stable/activerecord/lib/active_record/connection_adapters/">ActiveRecord in SVN</a> for examples on each.<br /><br /><span style="font-weight: bold;">Avoiding Modifying active_record.rb</span><br /><br />There's now a thread going on the Rails core mailing list and a bug to address the issue of adding adapters to Rails. Hopefully one of two things will come out of this:<br /><ul><li>"jdbc" will be added to the list of adapters available in core Rails</li><li>a mechanism will be added (or fixed) to allow adding to the list of adapters from outside the core source</li></ul>The former would be ideal, since no additional, special config changes would be needed for jdbc versus MySQL, for example. The latter would be an "ok" compromise, but would require modifying all apps to add "jdbc" to the adapter list. I'll report back when something comes of it.

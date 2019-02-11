@@ -1,0 +1,12 @@
+---
+layout: post
+title: libdl _dl_debug_initialize problem solved
+date: '2008-08-03T22:20:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:31.420-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-300279822355651083
+blogger_orig_url: http://blog.headius.com/2008/08/libdl-dldebuginitialize-problem-solved.html
+---
+
+I'm posting this to make sure it gets out there, so nobody else spends a couple days trying to fix it.<br /><br />Recently, after some upgrade, I started getting the following message during JRuby's run of RubySpecs:<br /><pre>Inconsistency detected by ld.so: dl-open.c: 623: _dl_open: Assertion<br /> `_dl_debug_initialize (0, args.nsid)->r_state == RT_CONSISTENT' failed!</pre><br />I narrowed it down to a call to getgrnam in the 'etc' library, which we provide using JNA. Calling that function through any means caused this error.<br /><br />My debugging skills are pretty poor when it comes to C libraries, so I mostly started poking around trying to upgrade or downgrade stuff. Most other posts about this error seemed to do the same thing, but weren't very helpful about which libraries or applications were changed. Eventually I got back to looking at libc6 versions, to see if I could downgrade and hopefully eliminate the problem, when I saw this text in the libc6-i686 package:<br /><pre> WARNING: Some third-party binaries may not work well with these<br /> libraries. Most notably, IBM's JDK. If you experience problems with<br /> such applications, you will need to remove this package.</pre><br />Nothing else seemed to depend on libc6-i686, so I removed it. And voila, the problem went away.<br /><br />This was on a pretty vanilla install of Ubuntu 7.10 desktop with nothing special done to it. I'm not sure where libc6-i686 came from.<br /><br />On a side note, sorry to my regular readers for not blogging the past month. I've been hard at work on a bunch of new JRuby stuff for an upcoming 1.1.4 release. I'll tell you all about it soon.

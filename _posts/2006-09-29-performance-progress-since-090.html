@@ -1,0 +1,12 @@
+---
+layout: post
+title: Performance Progress Since 0.9.0
+date: '2006-09-29T22:50:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:33.878-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-524690901700675615
+blogger_orig_url: http://blog.headius.com/2006/09/performance-progress-since-090.html
+---
+
+I love comparing current trunk against 0.9.0. It always makes me happy.<br /><br />Here are the numbers for a local gem install rake. The second set of numbers is trunk plus a ThreadContext-passing experimental patch I'm working on. Without my experimental patch, trunk benchmarks about four seconds slower.<br /><br />0.9.0:<br />real    2m1.867s<br />user    2m2.158s<br />sys     0m2.768s<br /><br />trunk + my patch:<br />real    1m22.221s<br />user    1m22.322s<br />sys     0m2.813s<br /><br />That's an increase of 32%. Are we having fun yet?<br /><br />The best part of this is that we haven't even started on a number of very promising performance changes, and we're still not compiling anything. Nibbling, nibbling away at overhead is paying serious dividends.

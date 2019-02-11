@@ -1,0 +1,14 @@
+---
+layout: post
+title: JRuby Compiler Will Happen
+date: '2006-04-27T12:23:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:34.774-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-6365717690890117773
+blogger_orig_url: http://blog.headius.com/2006/04/jruby-compiler-will-happen.html
+---
+
+Things have really been clicking along on JRuby. Tom has been knocking down Rails unit tests left and right, and more and more stuff is working. I found a nice little performance booster that gives us as much as 30-40% speed increase when starting up. Other folks have been working on updated YAML parsers, ActiveRecord-to-JDBC connectors, and in general helping us test JRuby in more and more scenarios. The future looks pretty good.<br /><br />However...<br />
+
+<br />I am still far from satisfied with the performance of JRuby. Even with recent cleanup and minor optimizations, a basic CGI-servlet Rails request takes a second or two to process. Much, much longer than it should have to, especially considering we're not hitting a persistent store yet. With JRuby moving ever closer to its goal of C Ruby 1.8 compatibility, why not start looking at those performance issues in more depth?<br /><br /><span style="font-weight: bold;">First Time for Everything</span><br /><br />I will admit, I've never written a compiler. Heck, until JRuby, I'd never worked on a language interpreter, much less written one. Of course, a lot has changed in a year, and I'm now one of the two people in the world who know the most about JRuby's internals. It has been quite a lesson in interpreter, language, and VM design...a lesson I've wanted to learn for the better part of my life.<br /><br />I believe it is time for us to start exploring options for compiling JRuby to intermediate "JRuby bytecode" or to Java bytecode in many cases. Other dyn-typed langages for the JVM continue to hold their compilers up as a reason to choose something other than JRuby. I think JRuby's time has come.<br /><br />I have been studying Ruby's AST, JRuby's implementation of its interpreter and core libraries, and the C Ruby code, and I am now confident we can do some level of compilation in the short term. The redesign of the core interpreter I committed last Fall has opened the door for more flexible traversal of the AST, including the ability to partially compile some scripts.<br /><br /><span style="font-weight: bold;">And So It Begins...</span><br /><br />With Rails, Spring, Swing, IRB, and our other demos for JavaOne basically ready to go (ahead of schedule!), I will be spending the next week or two researching and exploring options for a preliminary Ruby compiler. I believe I can have something by JavaOne; something primitive, sure, but perhaps something that can provide numbers to go on. Stay tuned!

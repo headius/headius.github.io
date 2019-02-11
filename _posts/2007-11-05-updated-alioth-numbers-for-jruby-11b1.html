@@ -1,0 +1,12 @@
+---
+layout: post
+title: Updated Alioth Numbers for JRuby 1.1b1
+date: '2007-11-05T01:35:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:32.337-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-84341755904044982
+blogger_orig_url: http://blog.headius.com/2007/11/updated-alioth-numbers-for-jruby-11b1.html
+---
+
+Oh yes, you all know you love the Alioth Shootout.<br /><br />Isaac Gouy has updated the JRuby numbers, and modified the default comparison to be with <a href="http://shootout.alioth.debian.org/gp4sandbox/benchmark.php?test=all&amp;lang=jruby">Ruby 1.8.6</a> rather than with <a href="http://shootout.alioth.debian.org/gp4sandbox/benchmark.php?test=all&amp;lang=jruby&amp;lang2=groovy">Groovy</a> as it was before. And true to form, JRuby is faster than Ruby on 14 out of 18 benchmarks.<br /><br />There are reasons for all four benchmarks that are slower:<br /><ul><li><span style="font-weight: bold;">pidigits</span> is simply too short for JRuby to hit its full stride. Alioth runs it with n = 2500, which on my system doing a simple "time" results in JRuby taking 11 seconds and Ruby taking 5. If I bump that up to 5000, JRuby takes 27 seconds to Ruby's 31.</li><li><span style="font-weight: bold;">regex-dna</span> and <span style="font-weight: bold;">recursive-complement</span> are both hitting the <a href="http://headius.blogspot.com/2007/10/another-performance-discovery-rexml.html">Regexp performance problem</a> we have in JRuby 1.0.x and in the 1.1 beta. We expect to have that resolved for 1.1 final, and Ola Bini and Marcin Mielczynski are each developing separate Regexp engines to that end.</li><li><span style="font-weight: bold;">startup</span>, beyond being a touch unfair for a JVM-based language right now, is actually about half our fault and half the JVM's. The JVM half is the unpleasantly high cost of classloading, and specifically the cost of generating many small temporary classes into their own classloaders, as we have to do in JRuby to avoid leaking classes as we JIT and bind methods at runtime. The JRuby half is the fact that we're loading and generating so many classes, most of them too far ahead of time or that will never be used. So there's blame to go around, but we'll never have Ruby's time for this.</li></ul>Standard disclaimer applies about reading too much into these kinds of benchmarks, but it's certainly a nice set of numbers to wake up to.

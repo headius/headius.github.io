@@ -1,0 +1,12 @@
+---
+layout: post
+title: Help Us Set Priorities for JRuby 1.3
+date: '2009-02-28T13:42:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:31.018-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-1025949853347496081
+blogger_orig_url: http://blog.headius.com/2009/02/help-us-set-priorities-for-jruby-13.html
+---
+
+With JRuby 1.2 almost out the door, I want to talk a bit about where we should go with JRuby 1.3. There's always more work to do, but in this case there's a few different directions we could probably go.<br /><br />Some obvious items will continue to see work:<br /><ul><li>1.9 libraries, interp, compiler, parser</li><li>1.8.6 bugs</li><li>"Pure ruby" application support, like Rails deployment stuff (Warbler, AR-JDBC)</li></ul>But there's other areas that we may want to prioritize:<br /><ul><li>1.8.7 support</li><li>Ruby execution performance (how fast do you want it?)</li><li>Specific library performance (YAML, IO, Java)</li><li>More Java integration improvement/refactoring (esp. subclassing)</li><li>"Compiler #2" to produce normal Java classes from Ruby</li><li>Improvements to AOT compilation (all-at-once, eliminate runtime codegen)</li><li>Expand support for embedded/mobile platforms</li></ul>And there's a number of internal chores to work on too:<br /><ul><li>Start generating most of the call path, to reduce duplicate code</li><li>Specific-arity optimizations for block yield (could be big)</li><li>Compiler cleanup and refactoring</li><li>Modularization of core classes that aren't valid on applet, Android, secured envs, etc; also may allow shipping smaller runtimes</li><li>More startup perf work; I have a few ideas</li></ul>As always, there's way more tasks than the few of us committing to JRuby can work on, so I think we need to hear from users what's important. Any of these? Other items?

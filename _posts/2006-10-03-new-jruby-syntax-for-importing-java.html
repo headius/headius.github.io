@@ -1,0 +1,12 @@
+---
+layout: post
+title: New JRuby Syntax for Importing Java Classes
+date: '2006-10-03T20:44:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:33.843-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-801537464886700194
+blogger_orig_url: http://blog.headius.com/2006/10/new-jruby-syntax-for-importing-java.html
+---
+
+We've added a cleaner, simpler syntax to JRuby for including Java classes into a given namespace. It stemmed from a <a href="http://archive.jruby.codehaus.org/user/fe35f8180610020718r6a7a8abbjc834967c5fc0b104%40mail.gmail.com">response of mine</a> to a user on the JRuby mailing lists, and has been committed to trunk already. Almost everyone on the list agreed this new syntax is better.<br /><br />Tom sums up the history of <a href="http://www.bloglines.com/blog/ThomasEEnebo?id=20">JRuby's Java include syntax</a> in his blog post, but here's the executive summary.<br /><br />Where before you would use this:<br /><br /><pre>include_class "java.util.ArrayList"<br />include_class("java.lang.String") { |p,n| "J" + n }</pre><br />You now can simply do this:<br /><br /><pre>ArrayList = java.util.ArrayList<br />JString = java.lang.String</pre><br />And this syntax also works directly; no assignment to a constant is required:<br /><br /><pre>class MyClass < java.awt.event.ActionListener<br />...<br />end</pre><br />Pretty slick, if you ask me.

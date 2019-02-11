@@ -1,0 +1,12 @@
+---
+layout: post
+title: Distributed Ruby (DRb) "Working Well"
+date: '2006-08-07T21:53:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:34.293-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-2116183475200580761
+blogger_orig_url: http://blog.headius.com/2006/08/distributed-ruby-drb-well.html
+---
+
+A new member of the JRuby community, Blane Dabney, submitted a patch for JRuby socket IO to resolve a DRb issue he'd been having. Our original implementation of a "write" method was not properly handling line terminators, and would end up blocking on write calls with nothing coming out the other end. After some investigation by us both, Blane managed to put together a simple, working patch that solves the issue.<br /><br />According to him, DRb from a Ruby client to a JRuby backend now "seems to be working well." I'm letting the patch stew for a bit, but it will likely be committed to trunk in the next couple days.<br /><br />The ability to use DRb from Ruby to JRuby opens up a whole new world of integration with Java services. I guess it's time one of us got busy on a DRb-to-EJB gateway, don't you think?

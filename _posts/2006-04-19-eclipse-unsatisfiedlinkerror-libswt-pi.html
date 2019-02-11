@@ -1,0 +1,14 @@
+---
+layout: post
+title: 'Eclipse UnsatisfiedLinkError: libswt-pi-gtk-3139'
+date: '2006-04-19T03:59:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:34.796-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-4591534459180392956
+blogger_orig_url: http://blog.headius.com/2006/04/eclipse-unsatisfiedlinkerror-libswt-pi.html
+---
+
+I ran into this a bit ago and found no solutions online. I figured it was my duty to provide at least one posting on how I solved it, since there seems to be a lot of frustrated people out there. My eventual solution was to run with 1.5 instead of 1.4.<br />
+
+<br />Upon starting Eclipse 3.1.1 or higher (or other SWT-based apps, it seems) under AMD64-based Linux, many people have reported the following error:<br /><br /><span style="font-size:85%;">!ENTRY org.eclipse.osgi 2006-04-08 13:53:48.407<br />!MESSAGE Application error<br />!STACK 1<br />java.lang.UnsatisfiedLinkError: /usr/local/src/eclipse/configuration/org.eclipse.osgi/bundles/85/1/.cp/libswt-pi-gtk-3139.so: /usr/local/src/eclipse/configuration/org.eclipse.osgi/bundles/85/1/.cp/libswt-pi-gtk-3139.so: cannot open shared object file: No such file or directory<br />        at java.lang.ClassLoader$NativeLibrary.load(Native Method)<br />        at java.lang.ClassLoader.loadLibrary0(ClassLoader.java:1586)<br />        at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1495)<br />        at java.lang.Runtime.loadLibrary0(Runtime.java:788)</span><br />...etc<br /><br />The .so in question is present, but it seems that when running under Sun's JDK 1.4.2, which does not provide an AMD64 version, this library can't be successfully loaded. I'm not saying this is a Java issue or an Eclipse issue, but I resolved it by running Eclipse under Sun's JDK 1.5 built for AMD64.<br /><br />Hopefully this helps anyone else out there searching for a solution.

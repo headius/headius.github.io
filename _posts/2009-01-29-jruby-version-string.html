@@ -1,0 +1,12 @@
+---
+layout: post
+title: The JRuby Version String
+date: '2009-01-29T20:37:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:31.160-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-1947107983539013184
+blogger_orig_url: http://blog.headius.com/2009/01/jruby-version-string.html
+---
+
+I just love the JRuby version string. I love it so much, I'm microblogging what each piece means.<br /><pre>jruby 1.2.0 (ruby 1.8.6 patchlevel 287) (2009-01-29 rev 8947+3) [x86_64-java]</pre><ul><li>Obviously "jruby 1.2.0" is the name of the impl and the version number. We'll probably modify this to suffix "-dev" on trunk.<br /></li><li>"ruby 1.8.6 patchlevel 287" roughly identifies which release of Ruby the current mode is intended to be compatible with.</li><li>"2009-01-29" is the date it was built.</li><li>The revision number "8947+3" indicates the base SVN revision is 8947 and I'm three commits ahead of it on my local git-svn clone. If I were using straight-up SVN it would just show current revision. Once we move to git it will just show the current hash, plus possibly the hash of origin's HEAD.</li><li>And finally "x86_64-java" identifies the hardware and platform we report to Ruby programs.</li></ul>Now what I really like is what happens when you specify the <span style="font-weight: bold;">--1.9</span> flag:<br /><pre>jruby 1.2.0 (ruby 1.9.1 patchlevel 0) (2009-01-29 rev 8947+3) [x86_64-java]</pre>How cool is that?

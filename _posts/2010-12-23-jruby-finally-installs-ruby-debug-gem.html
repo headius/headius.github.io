@@ -1,0 +1,12 @@
+---
+layout: post
+title: JRuby Finally Installs ruby-debug Gem
+date: '2010-12-23T13:31:00.000-08:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:30.245-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-518658072475549538
+blogger_orig_url: http://blog.headius.com/2010/12/jruby-finally-installs-ruby-debug-gem.html
+---
+
+This should be a great Christmas present for many of you.<br /><br />After over three years, the "ruby-debug" gem finally installs properly on JRuby.<br /><br /><pre>~/projects/jruby ➔ gem install ruby-debug<br />Successfully installed ruby-debug-base-0.10.4-java<br />Successfully installed ruby-debug-0.10.4<br />2 gems installed</pre><br /><br />Back in 2007, folks working on NetBeans, Eclipse, and IntelliJ support for Ruby came together to build a new version of the ruby-debug backend that would work on JRuby. They shared the effort, we JRuby guys added features they needed to do a clean port of the ruby-debug C code, and the ultimate result was a ruby-debug-base gem that isolated the platform-specific bits.<br /><br />For whatever reason, the JRuby version of ruby-debug-base never got pushed as a real, live "-java" gem. This meant that you had to download ruby-debug-base-VERSION-java.gem yourself to get ruby-debug to install. To make this process easier, we even shipped ruby-debug and ruby-debug-base preinstalled in JRuby 1.5.<br /><br />Unfortunately, this was only a partial answer. Many libraries and applications want to install all their dependencies clean. If one of those dependencies was ruby-debug, it would fail to install. Rails even includes special JRuby-specific lines in its default Bundler Gemfile to exclude ruby-debug when bundling on JRuby.<br /><br />All that nonsense ends today. Rocky Bernstein, one of the maintainers of the ruby-debug gem, agreed to push our ruby-debug-base to the canonical rubygems.org repository. As a result, ruby-debug now installs properly on JRuby. It only took three years to get that gem pushed (by nobody's fault...I think everyone expected everyone else to follow through on it).<br /><br />Merry Christmas, Happy Chanukah, Joyous Kwanza, and enjoy your holiday season!

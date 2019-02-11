@@ -1,0 +1,12 @@
+---
+layout: post
+title: Groovy and JRuby Cooperating?
+date: '2007-07-18T16:27:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:32.660-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-8021462306912209061
+blogger_orig_url: http://blog.headius.com/2007/07/groovy-and-jruby-cooperating.html
+---
+
+Can it be true? Of course it can!<br /><br />Graeme Rocher blogs about a new feature in upcoming Groovy 1.1 beta 3: <a href="http://graemerocher.blogspot.com/2007/07/method-missing-in-groovy-part-2.html">support for Ruby-style "method missing" hooks</a>!<br /><br />In heavily metaprogrammed applications, it's very common to define methods on the fly in response to calls made. For example, in Rails ActiveRecord, no "find by" methods are defined out of the box, but you may still call "find_by_x_and_y_and_z" to run your specific query. In order to reduce the overhead of handling these "missing methods" (usually through parsing the called name), it's typical to generate new methods on demand, binding them to the called class. So if you call find_by_name and it doesn't exist, two things happen: the query is generated and run and a new find_by_name method is dynamically created for future queries.<br /><br />After Graeme blogged about <a href="http://graemerocher.blogspot.com/2007/07/dealing-with-method-missing-with.html">the typical way to dynamically create methods in Groovy</a>, I tapped him on IM and we started to talk about how Ruby handles the same use case. We agreed that the overhead of overriding invokeMethod (Groovy's entry point for all dynamic calls) was problematic...it's already got enough to do without adding the method-generation logic. As it turns out, "method missing" was a perfect remedy, and pretty easy to add into Groovy. Graeme's already started work to modify Grails to take advantage of methodMissing and I'm sure it will catch on like wildfire in the rest of Groovydom. And as a result you, the JVM dynamic language community, gain the benefit of a little Groovy/JRuby cross-pollination.<br /><br />So for all you haters out there who just love to pit language teams against one another I say this:<br /><br />Nyah.

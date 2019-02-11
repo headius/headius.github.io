@@ -1,0 +1,12 @@
+---
+layout: post
+title: BiteScript 0.0.1 - A Ruby DSL for JVM Bytecode
+date: '2009-03-28T12:21:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:30.979-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-2089735537833813739
+blogger_orig_url: http://blog.headius.com/2009/03/bitescript-001-ruby-dsl-for-jvm.html
+---
+
+I have finally released the first version of <a href="http://kenai.com/projects/jvmscript">BiteScript</a>, my little DSL for generating JVM bytecode. Install it as a gem with "gem install bitescript".<br /><pre>require 'bitescript'<br /><br />include BiteScript<br /><br />fb = FileBuilder.build(__FILE__) do<br />public_class "SimpleLoop" do<br /> public_static_method "main", void, string[] do<br />   aload 0<br />   push_int 0<br />   aaload<br />   label :top<br />   dup<br />   aprintln<br />   goto :top<br />   returnvoid<br /> end<br />end<br />end<br /><br />fb.generate do |filename, class_builder|<br />File.open(filename, 'w') do |file|<br /> file.write(class_builder.generate)<br />end<br />end</pre><br />BiteScript grew out of my work on <a href="http://kenai.com/projects/duby">Duby</a>. I did not want to call directly into a Java bytecode API like ASM, so I wrapped it with a nice Ruby-like layer. I also wanted the option of having blocks of bytecode look like raw assembly, but also callable as an API.<br /><br />Currently only two projects I know of make use of BiteScript: Duby and the upcoming Ruby-to-Java "compiler2" in JRuby, which will also be released as a gem.<br /><br />For a longer example, you can look at <a href="http://svn.codehaus.org/jruby/trunk/jruby/tool/compiler2.rb">tool/compiler2.rb</a> in JRuby, <a href="https://kenai.com/hg/duby~mercurial/file/d0fc20d338bc/lib/duby/jvm/compiler.rb">lib/duby/jvm/jvm_compiler.rb</a> in Duby, or an example implementation of <a href="http://kenai.com/hg/jvmscript~mercurial/file/tip/examples/fib.bs">Fibonacci in BiteScript</a>.<br /><br />I'm open to suggestions for how to improve the API, and I'd also like to add the missing Java 5 features. The better BiteScript works, the better Duby and "compiler2" will work.<div><br /></div><div>For folks interested in using BiteScript, the <a href="http://java.sun.com/docs/books/jvms/second_edition/html/VMSpecTOC.doc.html">JVM Specification</a> is an easy-to-read complete reference for targeting the JVM, and here is <a href="http://homepages.inf.ed.ac.uk/kwxm/JVM/home.html">my favorite JVM opcode quickref</a>.</div>

@@ -1,0 +1,12 @@
+---
+layout: post
+title: 'Performance: Inlining Strings'
+date: '2006-08-31T19:08:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:34.101-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-5327586458899818829
+blogger_orig_url: http://blog.headius.com/2006/08/performance-inlining-strings.html
+---
+
+A while ago, we decided to inline all appropriate symbolic strings as they entered the AST. This appeared to help performance a measurable amount, presumably for two reasons:<br /><ol><li>The AST would take up less space in the long term</li><li> Since Strings cache their hashcodes, having each identical string in the AST be the same object would reduce the number of hash calculations.</li></ol>  And the numbers seem to bear it out. Here's a local rake install:<br /><br />Without interning AST strings:<br />real    1m19.894s<br />user    1m18.649s<br />sys     0m0.920s<br /><br />With interning AST strings:<br />real    1m15.021s<br />user    1m13.785s<br />sys     0m0.948s<br /><br />So it's very measurable...in this case 4-5 seconds out of 80 seconds, or about a 6% gain with interning.<br /><br />However this week I realized the fallacy of the second point above. In order to intern each incoming string, Java must hash them. This causes all strings entering the AST to be hashed once anyway in order to get the interned version. In fact, it could reduce performance, since we're now forced to hash strings we might never encounter during execution.<br /><br />I can't confirm that this is 100% true, but it's a reasonable theory. String.intern() is native code, but logic dictates that the fastest way to intern strings would be to use an internal hash/symbol table. So I proceeded this evening to try removing interning to see how it affected performance. I hoped to get a small gain during execution due to a large gain during parsing. The numbers above show that I lose a measurable amount overall by interning. However, I do see substantial parse performance gains:<br /><br />With interning AST strings (Time.now - t method of measuring 100 parses):<br />11.101<br /><br />Without interning AST strings:<br />9.404<br /><br />About 1.7 seconds out of 11, or a whopping 15% gain in parse speed without interning. AARGH.<br /><br />At this point I'm leaning toward removing interning and swallowing the 6% performance hit temporarily until we can figure out where it's coming from. Logically, interning everything should only add overhead, or so my brain tells me. Where's the flaw in my logic?

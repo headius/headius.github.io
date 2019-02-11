@@ -1,0 +1,12 @@
+---
+layout: post
+title: JRuby Moves to Git
+date: '2009-04-13T17:30:00.000-07:00'
+author: headius
+tags: 
+modified_time: '2011-01-25T21:44:30.932-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-8093401004212568874
+blogger_orig_url: http://blog.headius.com/2009/04/jruby-moves-to-git.html
+---
+
+We have successfully migrated JRuby development to Git!<br /><br />The main repository is on the <a href="http://kenai.com/projects/jruby">JRuby kenai.com project</a>, but most folks will just want to clone the official mirror on Github. The mirror lags by no more than five minutes, and we'll eliminate that lag soon.<br /><br />Kenai: <a href="git://kenai.com/jruby~main">git://kenai.com/jruby~main</a><br />Github: <a href="git://github.com/jruby/jruby.git">git://github.com/jruby/jruby.git</a><br /><br /><div>The Github repository is also attached to the <a href="http://github.com/jruby">official Github "jruby" user</a>.</div><div><br />The CI server has already been updated to point at the new repository on kenai, and nightly builds have been running for several days. If you just want to grab a current nightly snapshot, you can do that from github's capabilities or by visiting the nightly build page:<br /><br /><a href="http://jruby.headius.com:8080/hudson/job/jruby-dist/">http://jruby.headius.com:8080/hudson/job/jruby-dist/</a><br /><br />The old SVN repository on Codehaus is now defunct for JRuby development and will not be updated any more. We will likely remove the JRuby branches and trunk soon and replace them with a README pointing to the new repository locations.<br /><br /><span style="font-weight:bold;">Why Git?</span><br /><br />We've known for a long time that we wanted to move to a distributed SCM, and had narrowed it down to Mercurial and Git.<br /><br />For a long time Mercurial was the front-runner, partly because we were more familiar with it and partly because kenai.com, the site where we're moving JRuby's project hosting (and a JRuby on Rails-based site, btw), only supported Subversion and Mercurial.<br /><br />But a few things changed our minds over the past couple months:<br /><div><ul><li>Kenai added git support</li><li>We realized that we'd get more Rubyists contributing if we had a mirror on Github</li><li>We became more comfortable with Git</li></ul><div>Ultimately, the move to Git mostly came down to politics: Rubyists like Git better, and we're a Ruby-related project. Had we been Jython, we'd probably have chosen Mercurial.</div><div><br /></div><div>Enjoy!</div></div></div>

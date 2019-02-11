@@ -1,0 +1,16 @@
+---
+layout: post
+title: Using JRuby's "complete" JAR for OS X App Bundles
+date: '2006-11-19T21:08:00.000-08:00'
+author: headius
+tags:
+- application bundle
+- ruby
+- os x
+- jruby
+modified_time: '2011-01-25T21:44:33.529-08:00'
+blogger_id: tag:blogger.com,1999:blog-4704664917418794835.post-7632355447038974388
+blogger_orig_url: http://blog.headius.com/2006/11/using-jruby-jar-for-os-x-app-bundles.html
+---
+
+Now this is really cool. Tony Hursh, commenter on the previous "Advanced Rails Deployment" post, put together an OS X Application Bundle template that allows you to use the JRuby "complete" JAR file as the base of a typical OS X app. What does that mean? That means you just toss the complete JAR into this template, code up some Ruby code, and have a nice dock icon and menu bar like any other app. You can ship the entire app as a bundle, with JRuby as the built-in Ruby interpreter. Awesome.<br /><br />Some pics showing the menu working like you'd expect and the JRuby logo as a dock icon:<br /><br /><img src="http://teach.alternamatch.com/jruby/shot3.jpg" border="0" alt="" /><br /><br /><img src="http://teach.alternamatch.com/jruby/shot5.jpg" border="0" alt="" /><br /><br />Check out Tony's <a href="http://teach.alternamatch.com/jruby/">JRuby OS X App Bundle walkthrough</a> to see for your self. It's a really outstanding application of JRuby's "Ruby-in-a-JAR" support.
