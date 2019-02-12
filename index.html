@@ -9,7 +9,23 @@ layout: default
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
       <div class="entry">
-        {{ post.content | replace_first: "<br /><br />", "&lt;br /&gt;" | split: "<br /><br />" | first | strip_html | truncatewords: 50, "" | replace: "&lt;br /&gt;", "<br />" | append: "..." | replace: "....", "..." }}
+
+        {{
+	post.content |
+	replace_first: "<br />", "&lt;br /&gt;" |
+	replace_first: "
+", "&lt;br /&gt;" |
+	replace: "
+", "<br /><br />" |
+	split: "<br /><br />" |
+	first |
+	strip_html |
+	truncatewords: 50, "" |
+	replace: "&lt;br /&gt;", "<br />" |
+	append: "..." |
+	replace: "....", "..."
+	}}
+
       </div>
 
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>

@@ -88,3 +88,9 @@ exclude:
 
 paginate: 20
 paginate_path: "/blog/page:num/"
+
+defaults:
+  -
+    values:
+      layout: post
+      author: headius
