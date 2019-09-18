@@ -63,7 +63,7 @@ This first example compares `ruby -e 1` times on CRuby 2.6.4 versus JRuby 9.2.9 
 ![ruby -e 1 startup times](/images/ruby_dash_e.png)
 
 Yikes! Both implementations are doing roughly the same work here: setting up the core classes and booting the
-RubyGems subsystem. But JRuby's taking 100x longer to do it!
+RubyGems subsystem. But JRuby's taking 16x longer to do it!
 
 I say this is a worst case because it really gives us no time at all to optimize any code. JRuby doesn't try to
 JIT anything until *after* baseline startup. The JVM does optimize some of our code, but it's too little, too
@@ -132,3 +132,63 @@ For this example, I'm piping the function call `exit` to the console so it termi
 up.
 
 ![rails console startup and exit](/images/rails_console.png)
+
+Here, finally, we have an example where JRuby's "best" startup time is less than 2x slower than CRuby. We are
+closing the gap!
+
+We have some baseline numbers now, based on the `-e 1`, `gem list`, `gem install`, and `rails console` command
+lines. Let's explore a few other scenarios for speeding up these commands.
+
+Ahead-of-time compilation
+-------------------------
+
+The new hotness in the JVM world is the re-emergence of *ahead-of-time* compilation (AOT), which precompiles all
+your application's JVM bytecode to native code before you ever run it. The most recent and arguably most
+successful example of this comes from GraalVM, an enhanced OpenJDK-based runtime that examines and optimizes
+your whole application at once (so-called "closed-world" optimization) to produce small, fast, efficient native
+binaries.
+
+Sounds like just the magic we need, right? For some cases, it may be! An alternative Ruby implementation called
+TruffleRuby -- part of the same GraalVM project -- uses AOT and a prebooted image of the heap to improve their
+baseline startup substantially.
+
+![rails -e 1 truffleruby comparison](/images/ruby_dash_e_truffleruby.png)
+
+Wow! Not only has this eliminated the startup gap, it's actually *better* startup time than CRuby.
+
+There's a number of techniques at play here in addition to AOT, which you can read about in Benoit Daloze's blog
+[How TruffleRuby's Startup Became Faster than MRI's](https://eregon.me/blog/2019/04/24/how-truffleruby-startup-became-faster-than-mri.html).
+There's a lot of clever, exciting work going on there.
+
+So how does TruffleRuby fare on running our three common Ruby commands above? Unfortunately, things get a little
+murky here.
+
+![common ruby commands truffleruby comparison](/images/ruby_commands_truffleruby.png)
+
+Unfortunately, since TruffleRuby still parses, compiles, and executes Ruby code from source, they still see poor
+startup time in comparison to CRuby. I'm sure they're continuing to work on this, so watch this space.
+
+Ahead-of-time compilation may still be an option for JRuby, however. Our interpreter is much simpler than the one
+found in TruffleRuby, so precompiling JRuby to native code should run pretty well. And since JRuby already can
+precompile Ruby code to JVM bytecode, it's possible we could skip right past the parse, compile, and JIT phases. We
+hope to explore this option in the next few months.
+
+Alternative JVMs: Eclipse OpenJ9
+--------------------------------
+
+One of the most exciting developments of the past year was the official open source release of IBM's J9 JVM as OpenJ9.
+J9 is one of the few world-class, fully-compliant JVM implementations out there, with a completely different array
+of optimizations, garbage collectors, and supported platforms. Having OpenJ9 available gives JRubyists another way
+to run, scale, and deploy Ruby applications.
+
+One of the cooler features of OpenJ9 is its ability to share pre-processed class data across runs. When you pass the
+`-Xshareclasses` flag, OpenJ9 will create a shared archive containing pre-parsed, pre-verified JVM bytecode and class
+data. In addition, it will dynamically save native code output from the JIT, allowing those methods to start up a bit
+"hotter" and skipping the interpreter and some optimization stages.
+
+An additional flag `-Xquickstart` reduces how much optimization OpenJ9 does (similar to the Hotspot `TieredStopAtLevel`
+flag shown above) to allow short-running commands to get up and going more quickly.
+
+And as of JRuby 9.2.9, we include these flags in our `--dev` mode!
+
+
