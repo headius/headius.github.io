@@ -250,4 +250,4 @@ couple weeks.
 
 Have fun!
 
-[Discuss this post on Reddit]()
+[Discuss this post on Reddit](https://www.reddit.com/r/ruby/comments/d6444b/start_it_up_improving_jrubys_startup_time/)
