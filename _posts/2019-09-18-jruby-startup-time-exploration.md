@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Start It Up: Improving JRuby's Startup Time"
-date: '2019-09-18'
+date: "2019-09-18 16:09"
 author: Charles Oliver Nutter
 ---
 
@@ -22,7 +22,7 @@ recently with the rise of small services and cloud "functions" has the issue of 
 a concern again.
 
 In the Ruby world, things are very different. Most non-coding development tasks involve running Ruby at a command
-line, be they installing libraries, generating models, or starting up interactive consoles and application
+line, be they installing libraries, generating code, or starting up interactive consoles and application
 servers. Rubyists do the great majority of their work using two tools: an editor, and a terminal. And because of
 this, JRuby needs to have acceptable startup time.
 
@@ -156,12 +156,11 @@ baseline startup substantially.
 
 Wow! Not only has this eliminated the startup gap, it's actually *better* startup time than CRuby.
 
-There's a number of techniques at play here in addition to AOT, which you can read about in Benoit Daloze's blog
+There's a number of techniques at play here in addition to AOT, which you can read about in Benoit Daloze's blog post
 [How TruffleRuby's Startup Became Faster than MRI's](https://eregon.me/blog/2019/04/24/how-truffleruby-startup-became-faster-than-mri.html).
 There's a lot of clever, exciting work going on there.
 
-So how does TruffleRuby fare on running our three common Ruby commands above? Unfortunately, things get a little
-murky here.
+So how does TruffleRuby fare on running our three common Ruby commands above? Things get a little murky here.
 
 ![common ruby commands truffleruby comparison](/images/ruby_commands_truffleruby.png)
 
@@ -191,4 +190,64 @@ flag shown above) to allow short-running commands to get up and going more quick
 
 And as of JRuby 9.2.9, we include these flags in our `--dev` mode!
 
+![common ruby commands openj9 comparison](/images/ruby_commands_openj9.png)
 
+Now we're talking! By combining the "quickstart" and "shareclasses" flags, we've improved on the Hotspot startup
+times in two out of three cases. The third, `rails console` is oddly slower...we look forward to working with the
+OpenJ9 team to get that one optimized as well.
+
+If you're on an unusual platform (AIX? PowerPC?) or just want to try something new, you should definitely start
+playing with JRuby on OpenJ9. Expect to see JRuby make better use of OpenJ9's unique features very soon.
+
+Bleeding edge: OpenJDK 13
+------------------------
+
+The last example I want to show is from the just-released OpenJDK 13, which brings to the table improved support for
+what they call "class data sharing" (CDS).
+
+The CDS feature started out as a paid option from Sun Microsystems and later Oracle, but as of OpenJDK 8 it is both
+free and Free. Since that time, it has been improved to cache more data, more efficiently, and most recently it is
+now possible to generate the CDS "archive" dynamically based on a given run of the JVM.
+
+We can use the new `-XX:ArchiveClassesAtExit=filename.jsa` flag to produce one of these archives, and
+`-XX:SharedArchiveFile=filename.jsa` flag to use it at runtime.
+
+![jdk13 cds command line](/images/cds_command_line.png)
+
+You can specify different files for different commands, of course, to have fine grained control over what's getting
+cached for you. With our simple example, we see some very nice improvements:
+
+![common ruby commands on JDK13 CDS](/images/ruby_commands_cds13.png)
+
+Another win over plain `--dev` on OpenJDK 8's version of Hotspot! Both of the gem commands are the fastest ever, and
+the `-e 1` time has dropped to a merge 10x CRuby's time. Frustratingly, the `rails console` is again slower than on
+Hotspot 8...what is it about Rails that continues to confound optimizing VMs?
+
+We will be exploring how best to take advantage of these improvements. Currently, JRuby will automatically use the
+CDS archive in `lib/jruby.jsa` if it exists, and if you're not using JDK 13 we provide the [jruby-startup](https://github.com/jruby/jruby-startup)
+gem with its `generate-appcds` command to regenerate this archive for you. Give it a try and let us know how it works
+for you!
+
+The bottom line
+---------------
+
+Startup time is crucial to the development process for most Rubyists, and we continue to improve how JRuby boots and
+executes to reduce startup time. Meanwhile, there's an army of VM engineers bringing startup optimizations to OpenJDK,
+GraalVM, and OpenJ9...that you as a JRubyist will benefit from. Work continues, but the future looks bright!
+
+Here's a short summary of what we've learned today:
+
+* JRuby provides a `--dev` flag to reduce startup time by reducing how much optimization happens.
+* GraalVM may provide a future path toward pre-compiling JRuby and key Ruby libraries to improve startup.
+* OpenJ9 includes [`-Xquickstart` and `-Xshareclasses`](https://developer.ibm.com/articles/optimize-jvm-startup-with-eclipse-openjj9/)
+  flags today to help commands start up more quickly.
+* Hotspot's Class Data Sharing [continues to improve](https://bugs.openjdk.java.net/browse/JDK-8221706) and already
+  provides the best JRuby startup for many commands.
+
+You can try out JRuby 9.2.9 from our [nightly builds](https://oss.sonatype.org/content/repositories/snapshots/org/jruby/jruby-dist/9.2.9.0-SNAPSHOT/)
+if you'd want the fastest-starting version of JRuby yet. We'll be putting out a formal release within the next
+couple weeks.
+
+Have fun!
+
+[Discuss this post on Reddit]()
