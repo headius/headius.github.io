@@ -117,7 +117,7 @@ using Rake for this example.
 
 ![gem install rake from local file](/images/gem_install_rake.png)
 
-Ok, now we can see that our ratio has improved from 100x slower to a mere 5x slower. We're now giving the JVM
+Ok, now we can see that our ratio has improved from 16x slower to a mere 5x slower. We're now giving the JVM
 a chance to "warm up" and optimize JRuby itself (but not too much!) so the numbers improve.
 
 Here's a comparison of the `gem list` command, listing all the gems I have installed locally (about 640 of them).
