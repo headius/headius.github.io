@@ -99,6 +99,9 @@ best startup time tip!
 We recommend JRuby users add this flag to the `JRUBY_OPTS` environment variable, so all JRuby processes and
 subprocesses see it.
 
+(Edit: Keep in mind that this flag turns off a number of optimizations, so don't try to benchmark any code with
+it enabled. Note below that I have dedicated part of my bash prompt to showing JRUBY_OPTS so I don't forget.)
+
 ![JRUBY_OPTS --dev flag](/images/jruby_opts_dev_flag.png)
 
 Let's move on to some examples that actually do some work. I promise things get better from here!
