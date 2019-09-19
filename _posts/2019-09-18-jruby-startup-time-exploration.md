@@ -208,8 +208,8 @@ Bleeding edge: OpenJDK 13
 The last example I want to show is from the just-released OpenJDK 13, which brings to the table improved support for
 what they call "class data sharing" (CDS).
 
-The CDS feature started out as a paid option from Sun Microsystems and later Oracle, but as of OpenJDK 8 it is both
-free and Free. Since that time, it has been improved to cache more data, more efficiently, and most recently it is
+The CDS feature started out as a paid option from Sun Microsystems and later Oracle, but as of OpenJDK 10 it is both
+free and Free for all uses. Since that time, it has been improved to cache more data, more efficiently, and most recently it is
 now possible to generate the CDS "archive" dynamically based on a given run of the JVM.
 
 We can use the new `-XX:ArchiveClassesAtExit=filename.jsa` flag to produce one of these archives, and
@@ -254,3 +254,6 @@ couple weeks.
 Have fun!
 
 [Discuss this post on Reddit](https://www.reddit.com/r/ruby/comments/d6444b/start_it_up_improving_jrubys_startup_time/)
+
+(Edit: An earlier version of this pots stated that Class Data Sharing was made free/Free in OpenJDK 8. It has been amended
+to indicate this happened in OpenJDK 10.)
