@@ -61,14 +61,14 @@ Project CRaC aligns JVM behavior with the requirements of a CRIU checkpoint by r
 
 A short introduction to CRaC is provided by Azul, one of the primary drivers of this technology: [What is CRaC?](https://docs.azul.com/core/crac/crac-introduction). Numbers provided in that post demonstrate the enormous potential; applications based on Spring Boot, Quarkus, and Micronaut can startup in a fraction of the time of a full, cold JVM process.
 
-Obviously, we want to JRuby users to benefit from CRaC too!
+Obviously, we want JRuby users to benefit from CRaC too!
 
 JRuby on CRaC
 -------------
 
 While it is true that JRuby compounds the startup challenges of the JVM, most of what we do at startup can fit well into a CRaC image:
 
-* Loading JRuby and its many component classes works like any other JVM framework.
+* Loading JRuby and its many component classes; this works like any other JVM framework.
 * JRuby's cold parser, compiler, and interpreter can be warmed up prior to checkpointing.
 * Ruby can also be pre-compiled to JVM bytecode and included in the image. When combined with a few warmup "training" cycles, you could see a JRuby CRaC restore leap directly into optimized Ruby code.
 
@@ -82,10 +82,79 @@ This first example will be on Linux, to allow CRIU to work natively. We'll explo
 You'll want to download:
 
 * A modern Linux environment.
-* Azul's build of OpenJDK 21 with CRaC support.
-* A clone of JRuby's `crac` branch, which adds the `org.crac` library as a dependency.
+* Azul's "Zulu" build of OpenJDK with CRaC support.
+* https://cdn.azul.com/zulu/bin/zulu22.32.17-ca-crac-jdk22.0.2-linux_x64.tar.gz
+* A clone of JRuby's `crac` branch, which adds runtime and command-line support for checkpointing.
+
+For Linux, I'm using a current release of Ubuntu (ADD VERSION AND LINK) running on x86_64.
+
+The currently available builds of Azul Zulu with CRaC will work for most of this example, but there's a more recent build that fixes BLAH
+
+You can do all JRuby build steps of this example using the Azul build; other than providing CRaC support, it is a standard JVM.
+
+Set JAVA_HOME to the JDK path, wherever you unpacked or installed Zulu.
+
+Your clone of JRuby can be built using the provided Maven launcher: `./mvn` is enough to get a fully-working JRuby distribution. Put `bin/` in PATH and you're ready to try out JRuby with CRaC!
+
+Something Simple
+----------------
+
+We'll start by exploring the simplest example, evaluating the number `1` and exiting. We'll just use `time` because we want full end-to-end process time.
+
+First, JRuby with no extra flags:
+
+headius@nuttergros-server:~/work/jruby$ time jruby -e 1
+
+real	0m1.847s
+user	0m5.686s
+sys	0m0.214s
+headius@nuttergros-server:~/work/jruby$ time jruby -e 1
+
+real	0m1.855s
+user	0m5.521s
+sys	0m0.201s
+headius@nuttergros-server:~/work/jruby$ time jruby --dev -e 1
+
+real	0m1.223s
+user	0m1.847s
+sys	0m0.167s
+headius@nuttergros-server:~/work/jruby$ time jruby --dev -e 1
+
+real	0m1.254s
+user	0m1.891s
+sys	0m0.183s
+headius@nuttergros-server:~/work/jruby$ time jruby --dev --disable-gems -e 1
+
+real	0m0.883s
+user	0m1.235s
+sys	0m0.118s
+headius@nuttergros-server:~/work/jruby$ time jruby --disable-gems -e 1
+
+real	0m1.293s
+user	0m3.188s
+sys	0m0.170s
+headius@nuttergros-server:~/work/jruby$ time jruby --dev --disable-gems -e 1
+
+real	0m0.864s
+user	0m1.235s
+sys	0m0.115s
+headius@nuttergros-server:~/work/jruby$ time jruby -e "t = Time.now; 1; puts Time.now - t"
+0.000171
+
+real	0m1.862s
+user	0m5.594s
+sys	0m0.179s
+headius@nuttergros-server:~/work/jruby$ time jruby -e "t = Time.now; 1; puts Time.now - t"
+0.000163
+
+real	0m1.852s
+user	0m5.706s
+sys	0m0.202s
 
 
+For Rails show base bootup is still not fast
+
+need flag for checkpoint files to reopen? logs in rails kill restore
 
 TODO:
 
