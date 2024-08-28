@@ -5,7 +5,7 @@ date: "2024-08-16"
 author: Charles Oliver Nutter
 ---
 
-Hello friends! I'm reentering the blogspace with a series about improving JRuby startup time with CRaC (Coordinated Restore at Checkpoint)! If that sounds intriguing, read on!
+Hello friends! Today we start a series on improving JRuby startup time using the new OpenJDK CRaC project (Coordinated Restore at Checkpoint)! If that sounds intriguing, read on!
 
 The Hardest Problem in JRuby
 ----------------------------
