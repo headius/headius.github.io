@@ -5,7 +5,7 @@ date: "2024-08-16"
 author: Charles Oliver Nutter
 ---
 
-Hello friends! I'm reentering the blogspace with a quick post about improving JRuby startup time with CRaC (Coordinated Restore at Checkpoint)! If that sounds intriguing, read on!
+Hello friends! I'm reentering the blogspace with a series about improving JRuby startup time with CRaC (Coordinated Restore at Checkpoint)! If that sounds intriguing, read on!
 
 The Hardest Problem in JRuby
 ----------------------------
@@ -44,7 +44,7 @@ Many projects have been launched with varying degrees of success to reduce the t
 
 I covered some of the trade-offs of AOT compilation and other tricks for startup time in my previous post (five years ago, whew!), [Start It Up: Improving JRuby's Startup Time](http://blog.headius.com/2019/09/jruby-startup-time-exploration.html).
 
-I'm happy to report that after years of projects like JRuby complaining about startup time, serious effort are being made to solve this long-standing JVM problem. This post will cover one such effort: OpenJDK's **Project CRaC**!
+I'm happy to report that after years of projects like JRuby complaining about startup time, serious effort are being made to solve this long-standing JVM problem. This series will cover one such effort: OpenJDK's **Project CRaC**!
 
 A Powerful Project with an Unfortunate Name
 -------------------------------------------
@@ -111,6 +111,8 @@ jruby 9.4.9.0-SNAPSHOT (3.1.4) 2024-08-27 b3ad13d90d OpenJDK 64-Bit Server VM 22
 It Works! But At What Cost?
 ---------------------------
 
+My previous article talked about [JRuby startup time](http://blog.headius.com/2019/09/jruby-startup-time-exploration.html) and how to get the most out of it with various strategies, but we'll just visit a few key examples here.
+
 We'll start by getting a baseline time to print out version strings from the JDK and from JRuby.
 
 First, `java -version`, which will mostly be native code:
@@ -150,18 +152,7 @@ user	0m5.569s
 sys	0m0.161s
 ```
 
-First, JRuby with no extra flags:
-
-```
-~/work/jruby $ time jruby -e 'puts("hello")'
-hello
-
-real	0m1.804s
-user	0m5.569s
-sys	0m0.161s
-```
-
-This is a pretty typical result on most local Linux dev systems, and when compared with the standard C implementation of
+This is a pretty typical result on most local Linux dev systems, but when compared with the standard C implementation of
 Ruby, you can see why faster startup time is our most often-requested feature:
 
 ```
@@ -192,33 +183,9 @@ user	0m5.535s
 sys	0m0.195s
 ```
 
-The JRuby time varied on my machine from as low as 0.00197 up to 0.0022, but it's clearly a small amount for both implementations and shows the impact of booting each runtime.
+The JRuby `puts` timing varied on my machine from as low as 0.00197 up to 0.0022. It seems that nearly all of the total execution time is just getting the JVM and JRuby ready to run Ruby code.
 
-So, we have two options to improve the situation on a typical JVM:
-
-* Boot faster
-* Don't boot.
-
-Of course we are always looking for ways to speed up JRuby's boot time, but there's only so much we can do. A lot of code just has to load and run cold to set up a fully-prepared Ruby runtime on the JVM.
-
-We have a few ways to avoid doing as much work at boot time, but anything less than a full boot generally impacts the completeness of the JRuby runtime environment.
-
-### Improving Startup on a non-CRaC JDK
-
-My article on JRUBY STARTUP ARTICLE AND LINK
-
-Since we want to have a full-booted JRuby runtime, we will just time JRuby's `--dev` mode for comparison:
-
-```
-~/work/jruby $ time jruby --dev -e 'puts("hello")'
-hello
-
-real	0m1.255s
-user	0m1.944s
-sys	0m0.157s
-```
-
-We can also use AppCDS to get the best-possible JRuby startup time on the current JDK:
+Finally, here's execution time with all the best tricks we have available on standard OpenJDK releases today (using AppCDS and our `--dev` mode flag):
 
 ```
 ~/work/jruby $ gem install jruby-startup
@@ -228,20 +195,10 @@ Done installing documentation for jruby-startup after 0 seconds
 1 gem installed
 
 ~/work/jruby $ generate-appcds 
-*** Outputting list of classes at /home/headius/work/jruby/lib/jruby.list
-
-
-*** Generating shared AppCDS archive at /home/headius/work/jruby/lib/jruby.jsa
 
 <lots of output omitted>
 
 *** Success!
-
-JRuby versions 9.2.1 or higher should detect /home/headius/work/jruby/lib/jruby.jsa and use it automatically.
-For versions of JRuby 9.2 or earlier, set the following environment variables:
-
-VERIFY_JRUBY=1
-JAVA_OPTS="-XX:G1HeapRegionSize=2m -XX:SharedArchiveFile=/home/headius/work/jruby/lib/jruby.jsa"
 
 ~/work/jruby $ time jruby --dev -e 'puts("hello")'
 hello
@@ -251,12 +208,16 @@ user	0m1.439s
 sys	0m0.124s
 ```
 
-So with all our best tricks, we've reduced the startup gap with C Ruby to around thirteen times. It's better, but still noticeably slower, and this effect is magnified when more Ruby code must be loaded to run a command line.
+We've reduced the startup gap with C Ruby to around thirteen times. It's better, but still noticeably slower, and this effect is magnified when more Ruby code must be loaded to run a command line. We're still not booting up as fast as we'd like, and we've disabled many optimizations in the process.
 
-But what if we could pre-boot the JVM and JRuby, since that's largely the same every time, and then save that moment in time for future runs? Actually let's just do exactly that using CRaC!
+We really just want to be able to skip all that boot overhead and go straight to executing code. But we also can't avoid setting up JRuby, and we don't want to disable critical optimizations that might help later on.
+
+What if we could start up a JVM, warm-up JRuby and prepare it for execution, and then save that moment in time for future commands? Actually, that's exactly what we can do with CRaC!
 
 Capturing a checkpoint
 ----------------------
+
+CRIU and CRaC both have the concept of a "checkpoint". This is the point at which the process (the JVM running JRuby in our case) is frozen in time and saved to disk. The resulting set of files reflects the memory space of that process and some of the resources it had acquired (some resources like file descriptors require extra work) and can be "restored" as a new process later on.
 
 The `crac` branch of JRuby contains some modifications to our shell script launcher to support checkpointing:
 
@@ -277,6 +238,11 @@ Killed
 ```
 
 A checkpoint has been captured and the original process killed. Can you guess how we run JRuby from a restored checkpoint?
+
+Restoring a checkpoint
+----------------------
+
+My branch also contains modifications for restoring from a checkpoint:
 
 ```
     --restore[=path]     Restore a CRaC checkpoint from path, defaulting to ./.jruby.checkpoint
@@ -302,7 +268,7 @@ CRaC support in JRuby
 
 Luckily most of the heavy lifting has been done by the excellent CRaC engineers.
 
-The `--checkpoint` flag just points the JRuby launcher script at a different `main` class: `CheckpointMain.java` LINK
+The `--checkpoint` flag just points the JRuby launcher script at a different `main` class, [CheckpointMain.java](https://github.com/jruby/jruby/blob/e3de925818ab356374b7c53a5154802e791da141/core/src/main/java/org/jruby/main/CheckpointMain.java), which overrides some behaviors in the base class [PrebootMain.java](https://github.com/jruby/jruby/blob/e3de925818ab356374b7c53a5154802e791da141/core/src/main/java/org/jruby/main/PrebootMain.java).
 
 This is a work-in-progress; we'll explore how the pieces fit together in Part 2 but I provide a high-level overview here.
 
@@ -330,7 +296,7 @@ The `--restore` flag uses the normal JRuby `Main` class, but when it detects our
 
 https://github.com/jruby/jruby/blob/e3de925818ab356374b7c53a5154802e791da141/core/src/main/java/org/jruby/Main.java#L259-L267
 
-And execution proceeds as normal from this point, except we've just skipped most of the expensive part of JRuby's startup!
+And execution proceeds as normal from this point, except we've just the most expensive part of JRuby's startup!
 
 Digging Deeper
 --------------
