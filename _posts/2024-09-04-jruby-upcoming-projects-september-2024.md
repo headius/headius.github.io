@@ -96,3 +96,5 @@ The Future of JRuby is Exciting!
 --------------------------------
 
 This is just a taste of plans for JRuby in 2024, 2025 and beyond! Development of OpenJDK has never been as rapid or as exciting as it is today, and there's even more projects on the horizon that will make it easier to support non-Java languages on the JVM. Watch this space for my upcoming posts on CRaC, Leyden, Loom, Panama, Babylon, Valhalla and more, and if you have a JRuby application that needs [professional JRuby support](https://www.headius.com/jruby-support), or your organization would like to [sponsor my work](https://github.com/sponsors/headius), please get in touch!
+
+**[Join the conversation on Reddit](https://www.reddit.com/r/ruby/comments/1f8v86q/jruby_upcoming_projects_2024/)**
