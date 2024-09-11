@@ -278,9 +278,28 @@ user	0m0.172s
 sys	0m0.092s
 ```
 
-Holy toledo! We're now less than twice the startup time of C Ruby, and we didn't even have to use `--dev` mode.
+Holy toledo! We're now less than twice the startup time of C Ruby. What if we combine this with `--dev`?
 
-What's actually happening here?
+```
+$ jruby --dev --checkpoint
+Sep 11, 2024 6:28:51 PM jdk.internal.crac.LoggerContainer info
+INFO: Starting checkpoint
+Sep 11, 2024 6:28:51 PM jdk.internal.crac.LoggerContainer info
+INFO: /home/headius/work/jruby/lib/jruby.jar is recorded as always available on restore
+CR: Checkpoint ...
+Killed
+
+~/work/jruby $ time jruby --restore -e "puts 'hello'"
+hello
+
+real	0m0.064s
+user	0m0.076s
+sys	0m0.046s
+```
+
+**_For the first time ever, JRuby starts up as fast as CRuby, with no loss of compatibility or functionality._**
+
+This is a truly amazing result, but what's actually happening here?
 
 CRaC support in JRuby
 ---------------------
@@ -289,9 +308,9 @@ Support for CRaC in JRuby is a work-in-progress; we'll explore how the pieces fi
 
 The `--checkpoint` flag adds a JVM flag to enable checkpointing, `-XX:CRaCCheckpointTo=path` and points the JRuby launcher script at a checkpoint-aware "main" class, [CheckpointMain](https://github.com/jruby/jruby/blob/3de80c34d4dc3e43e429e50f2a097f4bf9decbe2/core/src/main/java/org/jruby/main/CheckpointMain.java). CheckpointMain then uses the [CRaC API](https://crac.github.io/openjdk-builds/javadoc/api/java.base/jdk/crac/package-summary.html) and some JRuby-specific code to capture a checkpoint for us. There's three steps involved:
 
-* Run some code before capturing the checkpoint
+### Run some code before capturing the checkpoint
 
-  This does what you might expect: boot JRuby right up to the point at which we're about to execute code. Code in the base [PrebootMain](https://github.com/jruby/jruby/blob/826fc635d363e88974df00bcbebf0b95d3e13c10/core/src/main/java/org/jruby/main/PrebootMain.java) class runs some simple code through a throw-away JRuby instance to make sure all the critical classes have been loaded, and then boots up the JRuby instance we plan to capture. This can be configured (and I'm open to suggestions on how to make it as clean as possible).
+This does what you might expect: boot JRuby right up to the point at which we're about to execute code. Code in the base [PrebootMain](https://github.com/jruby/jruby/blob/826fc635d363e88974df00bcbebf0b95d3e13c10/core/src/main/java/org/jruby/main/PrebootMain.java) class runs some simple code through a throw-away JRuby instance to make sure all the critical classes have been loaded, and then boots up the JRuby instance we plan to capture. This can be configured (and I'm open to suggestions on how to make it as clean as possible).
 
 ```java
 protected String[] warmup(String[] args) {
@@ -302,9 +321,9 @@ protected String[] warmup(String[] args) {
 }
 ```
 
-* Prepare JRuby for checkpointing
+### Prepare JRuby for checkpointing
 
-  Because the checkpoint will be restored in a completely new process, there's some bookkeeping necessary to ensure JRuby adapts to the new environment. We tuck away a reference to the pre-booted JRuby runtime before the checkpoint, and fix it up after the restore.
+Because the checkpoint will be restored in a completely new process, there's some bookkeeping necessary to ensure JRuby adapts to the new environment. We tuck away a reference to the pre-booted JRuby runtime before the checkpoint, and fix it up after the restore.
 
 ```java
 protected Ruby prepareRuntime(RubyInstanceConfig config, String[] args) {
@@ -328,12 +347,11 @@ protected Ruby prepareRuntime(RubyInstanceConfig config, String[] args) {
 }
 ```
 
-* Request the checkpoint
+### Request the checkpoint
 
-  At this point CRaC steps in, performing its own graceful hand-holding for the JVM before requesting a CRIU checkpoint be captured.
+At this point CRaC steps in, performing its own graceful hand-holding for the JVM before requesting a CRIU checkpoint be captured.
 
 ```java
-@Override
 protected void endPreboot(RubyInstanceConfig config, Ruby ruby, String[] args) {
     super.endPreboot(config, ruby, args);
     try {
@@ -346,7 +364,7 @@ protected void endPreboot(RubyInstanceConfig config, Ruby ruby, String[] args) {
 }
 ```
 
-The `--restore` flag uses the normal JRuby [Main](https://github.com/jruby/jruby/blob/e3de925818ab356374b7c53a5154802e791da141/core/src/main/java/org/jruby/Main.java) class, but when it detects our pre-booted JRuby instance in memory, it uses that rather than start a new one:
+The `--restore` flag uses the normal JRuby [Main](https://github.com/jruby/jruby/blob/e3de925818ab356374b7c53a5154802e791da141/core/src/main/java/org/jruby/Main.java) class, but when it detects our pre-booted JRuby runtime in memory, it uses that instance rather than start a new one:
 
 ```java
 final Ruby runtime;
@@ -364,7 +382,7 @@ Execution proceeds as normal from this point, except we've just skipped the most
 Digging Deeper
 --------------
 
-Hopefully this post has whet your appetite for the incredible potential of JRuby and CRaC! It's early days for the CRaC project, and we're just starting to add support in JRuby, but to me this represents the most promising startup-time improvement we've seen in years.
+Hopefully this post has whet your appetite for the incredible potential of JRuby and CRaC! It's early days for the CRaC project but this is easily the most promising startup-time improvement we've seen in years.
 
 In Part 2, I'll show more advanced examples, running common command-line tools like `gem` and `bundle` and `rake`, and we'll explore how to pre-boot a Rails instance for faster local development. Future posts will talk through other aspects of using CRaC with JRuby, and I'll show you how to use Docker on Windows and MacOS to create a fast "virtual JRuby" that works like a normal local install.
 
@@ -373,9 +391,11 @@ I will also update this post as links change and new posts are releasesd.
 For now, you have the tools you need to experiment with JRuby and CRaC on your own Linux machines. I'd love to hear your feedback... let's get CRaCking!
 
 _JRuby Support and Sponsorship_
------------------------------
+-------------------------------
 
-_This is a call to action! JRuby development is funded entirely through your generous sponsorships and the sale of commercial support contracts for JRuby developers and enterprises around the world. If you find my work exciting or believe it is important your company or your projects, please consider partnering with me to keep JRuby strong and moving forward!_
+_This is a call to action!_
+
+_JRuby development is funded entirely through your generous sponsorships and the sale of commercial support contracts for JRuby developers and enterprises around the world. If you find my work exciting or believe it is important your company or your projects, please consider partnering with me to keep JRuby strong and moving forward!_
 
 [Sponsor Charles Oliver Nutter on GitHub!](https://github.com/sponsors/headius)
 
