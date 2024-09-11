@@ -390,6 +390,8 @@ I will also update this post as links change and new posts are releasesd.
 
 For now, you have the tools you need to experiment with JRuby and CRaC on your own Linux machines. I'd love to hear your feedback... let's get CRaCking!
 
+### [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1fehuuw/jruby_on_crac_part_1_lets_get_cracking_fast/)
+
 _JRuby Support and Sponsorship_
 -------------------------------
 
