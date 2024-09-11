@@ -18,11 +18,11 @@ Most popular C extensions have JRuby equivalents (using pure-Ruby or our similar
 
 ### _"A Java-based Ruby can't possibly be faster than one implemented in C"_
 
-JRuby frequently performs and scales better than even the latest Ruby versions with JIT capabities, and the legendary JVM garbage collectors generally prevent memory management from being a bottleneck. In fact, JRuby extensions frequently optimize _better_ than C extensions because it's all just bytecode to the JVM.
+JRuby frequently performs and scales better than even the latest Ruby releases with JIT capabilities, and the legendary JVM garbage collectors generally mean memory management is not a bottleneck. In fact, JRuby extensions frequently optimize _better_ than C extensions because it's all just bytecode to the JVM.
 
 ### _"My development workflow will have to change if I move to JRuby"_
 
-The development workflow when using JRuby is largely identical to using CRuby, and we've worked very hard to make sure command-line tools behave the same.
+The development workflow when using JRuby is largely identical to using CRuby, and we've worked very hard to make sure all the familiar command-line tools behave the same.
 
 However, hidden in this last item is a clue to the real JRuby challenge: **startup time**.
 
@@ -36,11 +36,11 @@ There's many factors impacting startup time for JVM-based applications, and JRub
 * JRuby itself starts out cold, which means our Ruby parser, compiler, interpreters, and core libraries take a bit of time to get going. We eventually convert Ruby scripts to bytecode, which is then interpreted and profiled like other JVM classes.
 * Simply loading all those classes and all that bytecode every time the JVM starts has a significant cost.
 
-Many projects have been launched with varying degrees of success to reduce the time between launching your application and running optimized code:
+Many projects have attempted with varying degrees of success to reduce the time between launching your application and running optimized code:
 
-* Projects like **AppCDS** (Class Data Store for Applications) save some of this "warm-up" work between runs so that future invocations get start more quickly. This is generally limited to static class data, but can be "trained" with specific sets of classes for specific scenarios.
+* Projects like **AppCDS** (Class Data Store for Applications) save some of this "warm-up" work to disk between runs so that future invocations start more quickly. This is generally limited to static class data, but can be "trained" with specific sets of classes for specific scenarios.
 * AOT compilers like **GraalVM Native Image** produce a pre-optimized native binary based on a closed-world view of your application and its dependencies. Unfortunately this means giving up dynamic code loading and invokedynamic support APIs like MethodHandles (both used heavily by JRuby).
-* Pre-loading and background-process launchers like **Drip**, **Nailgun**, and similar tools for Ruby like **Theine** or **Spring** attempt to keep a pre-booted process "warm" and ready to be used. Unfortunately hooking up an active TTY to a background process can be buggy, and tools like Nailgun that keep a single persistent JVM running can leak threads and other resources.
+* Pre-loading and background-process launchers like **Drip** and **Nailgun** for the JVM and similar tools for Ruby like **Theine** and **Spring** attempt to keep a pre-booted process "warm" and ready to be used. Unfortunately hooking up an active TTY to a background process can be buggy, and tools like Nailgun that keep a single persistent JVM running can leak threads and other resources.
 
 I covered some of the trade-offs of AOT compilation and other tricks for startup time in a previous post (five years ago, whew!), [Start It Up: Improving JRuby's Startup Time](http://blog.headius.com/2019/09/jruby-startup-time-exploration.html).
 
@@ -51,15 +51,22 @@ A Powerful Project with an Unfortunate Name
 
 Project CRaC (Coordinated Restore at Checkpoint) is an effort to bring checkpoint-and-restore technology to JVM applications.
 
-Checkpoint-and-restore is based on a Linux feature called [Checkpoint and Restore In Userspace](https://criu.org/Main_Page) (CRIU) and allows programs to capture an image, or "checkpoint", of a currently-executing process. This checkpoint can then be "restored" as a new process (repeatedly), continuing to execute as though nothing happened. UNIX fiends might think of it as a delayed `fork` where the parent immediately exits and the child can be continued later on, as many times as you want.
+Checkpoint-and-restore is based on a Linux feature called [Checkpoint and Restore In Userspace](https://criu.org/Main_Page) (CRIU) which allows programs to capture an image, or "checkpoint", of a currently-executing process. This checkpoint can then be "restored" as a new process (repeatedly), continuing to execute as though nothing happened. UNIX fiends might think of it as a delayed `fork` where the parent immediately exits and the child can be continued later on, as many times as you want.
 
-There's obviously a number of challenges for such an invasive operation (some that are similar to forking): open files and sockets must be restored, system resources claimed by the original process must be duplicated or re-acquired, threads can't survive the transition, and the new process may have little awareness that it has been restored from a previously-acquired image. On the JVM, many of these issues are amplified: most JVMs spin up many threads for GC and other bookkeeping, JVM apps may not track how many files or sockets they have open, and the JVM itself is a big process with lots of system requirements.
+There's obviously a number of challenges for such an invasive operation (some that are similar to forking):
+
+* Open files and sockets must be restored
+* System resources claimed by the original process must be duplicated or re-acquired
+* Threads generally can't survive the transition
+* The new process may have little awareness that it has been restored from a previously-acquired image
+
+On the JVM, many of these issues are amplified: most JVMs spin up many threads for GC and other bookkeeping, JVM apps may not track how many files or sockets they have open, and the JVM itself is a big process with lots of system requirements.
 
 That's where CRaC comes in.
 
-Project CRaC aligns JVM behavior with the requirements of a CRIU checkpoint by restarting runtime-level threads, patching up JDK internal state after the restore, and providing mechanisms for users to explicitly handle releasing and reacquiring system resources like open files and sockets or native OS libraries and memory.
+Project CRaC attempts to adapt the JVM to the requirements of a CRIU checkpoint by restarting runtime-level threads, patching up JDK internal state after the restore, and providing mechanisms for users to explicitly handle releasing and reacquiring system resources like open files and sockets or native OS libraries and memory.
 
-A short introduction to CRaC is provided by Azul, one of the primary drivers of this technology: [What is CRaC?](https://docs.azul.com/core/crac/crac-introduction). Numbers provided in that post demonstrate the enormous potential; applications based on Spring Boot, Quarkus, and Micronaut can start much faster with CRaC than they ever could with a cold JVM process.
+A short introduction to CRaC by Azul, one of the primary drivers of this technology, is provided here: [What is CRaC?](https://docs.azul.com/core/crac/crac-introduction). Numbers in that post demonstrate the enormous potential; applications based on Spring Boot, Quarkus, and Micronaut can start much faster with CRaC than they ever could with a cold JVM process.
 
 Obviously, we want JRuby users to benefit from CRaC too!
 
@@ -76,7 +83,7 @@ You'll want to download:
 
 ### Linux
 
-The only requirement is that the Linux you use support CRIU. Any kernel version 3.11 or later should support CRIU, though newer kernels may have an improved set of features.
+The only requirement is that the Linux you run must support CRIU. Any kernel version 3.11 or later should support CRIU, though newer kernels may have an improved set of features.
 
 For these examples, I used the latest LTS version of [Ubuntu Server, 24.04.1 (Noble Numbat)](https://ubuntu.com/download/server)
 
@@ -107,7 +114,7 @@ Put the `bin/` dir in your `PATH` and you're ready to try out JRuby with CRaC!
 ```
 $ export PATH=$PATH:`pwd`/bin
 $ jruby -v
-jruby 9.4.9.0-SNAPSHOT (3.1.4) 2024-08-27 b3ad13d90d OpenJDK 64-Bit Server VM 22.0.2+9 on 22.0.2+9 +jit [x86_64-linux]
+jruby 9.4.9.0-SNAPSHOT (3.1.4) 2024-09-11 3de80c34d4 OpenJDK 64-Bit Server VM 22.0.2+9-BETA on 22.0.2+9-BETA +jit [x86_64-linux]
 ```
 
 JRuby Without CRaC
@@ -130,7 +137,7 @@ user	0m0.017s
 sys	0m0.012s
 ```
 
-And then `jruby -v`, which loads only a few classes in JRuby, but is all Java code:
+And then `jruby -v`, which loads only a few classes in JRuby, all Java code:
 
 ```
 $ time jruby -v
