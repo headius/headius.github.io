@@ -145,6 +145,8 @@ The same flags shown above will work with JRuby 9.4, but there's no `--nocache` 
 
 Have fun, and let us know how it goes!
 
+## [Join the discussion on Reddit!](https://www.reddit.com/r/javavirtualmachine/comments/1ioncqe/boosting_jruby_startup_with_appcds_and_aot_caching/)
+
 _JRuby Support and Sponsorship_
 ===============================
 
