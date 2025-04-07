@@ -1,12 +1,57 @@
 ---
 layout: post
-title: "JRuby 10, Part 1: What's JRuby 10 Anyway?"
+title: "JRuby 10, Part 1: What's New and How Can I Get Started?"
 date: "2025-04-02"
 author: Charles Oliver Nutter
 published: false
 ---
 
+I am very excited to introduce you to JRuby 10, the biggest leap forward since JRuby 9 (also known as JRuby 9000). With up-to-date Ruby compatibility, support for modern JVM features, and a big cleanup of internal code and external APIs, we believe this is our most important release ever. This article will explore these improvements and help you get started on your JRuby 10 journey.
 
+Moving Forward
+==============
+
+### Compatibility jump to Ruby 3.4
+
+### Java up to 21
+
+### Full optimization by default
+
+### Startup time improvements
+
+Getting Started
+===============
+
+### Install a JDK
+
+### Install JRuby
+
+### Try it out
+
+Riding the Rails
+================
+
+### Rails compatibility
+
+### Generating an app
+
+### Config changes
+
+## Testing performance
+
+Integrating with JVM Languages
+==============================
+
+### Ruby on the JVM
+
+### Calling into Java
+
+### Using JVM libraries
+
+Artificial Bullshit
+===================
+
+Java libraries for AI, show how they can be used from JRuby easily.
 
 ## [Join the discussion on Reddit!](https://www.reddit.com/r/javavirtualmachine/comments/1ioncqe/boosting_jruby_startup_with_appcds_and_aot_caching/)
 
