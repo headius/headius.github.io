@@ -231,7 +231,7 @@ Over the coming weeks, I'll publish more detailed posts on each of these areas t
 
 Ruby's future depends on projects like JRuby and creative developers like you. Let's show them what we can do! 
 
-## [Join the discussion on Reddit!](https://www.reddit.com/r/javavirtualmachine/comments/1ioncqe/boosting_jruby_startup_with_appcds_and_aot_caching/)
+## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1jv91vy/jruby_10_part_1_whats_new/)
 
 _JRuby Support and Sponsorship_
 ===============================
