@@ -255,7 +255,7 @@ JFreeChart is just one charting library out of many in the Java ecosystem, and t
 
 Ruby faces many challenges these days, and we're solving them one at a time with JRuby and the JVM. I hope you will experiment with JRuby yourself and create something beautiful!
 
-## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1jv91vy/jruby_10_part_1_whats_new/)
+## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1kbqh5l/creating_beautiful_charts_with_jruby_and/)
 
 _JRuby Support and Sponsorship_
 ===============================
