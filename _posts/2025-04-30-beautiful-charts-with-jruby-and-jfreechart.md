@@ -105,7 +105,7 @@ jar 'org.jfree:jfreechart:1.5.5'
 Similar to a Gemfile's gem name and version, we specify the Maven coordinates of the library we want (separated by colons). Once we have this file, we can fetch and "lock" this dependency with the `lock_jars` command.
 
 ```text
-$ lock_jars
+jruby-charts $ lock_jars
 
 -- jar root dependencies --
 
@@ -223,13 +223,15 @@ pie_plot.set_explode_percent "Fun", 0.20
 pie_image = pie_chart.create_buffered_image 500, 500
 
 # Write the image as a GIF to a file
-javax.imageio.ImageIO.write(pie_image, "GIF", File.open("piechart.gif", "w").to_outputstream)
+
+pie_file = File.open("piechart.gif", "w")
+javax.imageio.ImageIO.write(pie_image, "gif", pie_file.to_outputstream)
 ```
 
 This example takes advantage of a few customizations provided by JFreeChart:
 
 * The edges of the pie are set to anti-alias for a cleaner look (`pie_chart.anti_alias = true`, which calls [setAntiAlias](https://www.jfree.org/jfreechart/javadoc/org/jfree/chart/JFreeChart.html#setAntiAlias(boolean))).
-* We access the actual [PiePlot](https://www.jfree.org/jfreechart/javadoc/org/jfree/chart/plot/PiePlot.html) object to [explode](https://www.jfree.org/jfreechart/javadoc/org/jfree/chart/plot/PiePlot.html#setExplodePercent(K,double)) one of the elements out of the pie.
+* We access the actual [PiePlot](https://www.jfree.org/jfreechart/javadoc/org/jfree/chart/plot/PiePlot.html) object to ["explode"](https://www.jfree.org/jfreechart/javadoc/org/jfree/chart/plot/PiePlot.html#setExplodePercent(K,double)) one of the elements out of the pie.
 * Instead of a PNG, we output a GIF, just because. The standard [Java ImageIO support](https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/javax/imageio/package-summary.html) can handle BMP, GIF, JPEG, PNG, TIFF, and WBMP, and there's third-party support for everything else.
 
 And here's the resulting pie chart:
@@ -249,9 +251,9 @@ In this post, you learned the following:
 
 We didn't have to write a single line of Java code, and we didn't have to call out to any nasty C, Python, or JavaScript libraries. The code you see and the libraries we loaded all run in the same JVM process alongside your Ruby code, and can be easily deployed to any system with a JDK. It's really that simple!
 
-JFreeChart is just one charting library out of many in the Java ecosystem, and there's thousands of other useful libraries you can start using with JRuby today. Need to generate PDFs or Office documents? Try OpenPDF or Apache Poi. Need to integrate with unusual databases? JDBC has you covered with a standard API. Want to deploy a single binary for your entire application? JRuby's Warbler project allows you to bundle everything up as a single jar file.
+JFreeChart is just one charting library out of many in the Java ecosystem, and there's thousands of other useful libraries you can start using with JRuby today. Need to generate PDFs or Office documents? Try [OpenPDF](https://github.com/LibrePDF/OpenPDF) or [Apache Poi](https://poi.apache.org/). Need to integrate with unusual databases? [JDBC](https://docs.oracle.com/en/java/javase/21/docs/api/java.sql/java/sql/package-summary.html) has you covered with a standard API. Want to deploy a single binary for your entire application? JRuby's [Warbler](https://github.com/jruby/warbler) project allows you to bundle everything up as a single jar file.
 
-Ruby faces many challenges these days, and JRuby can solve many of them using the power of the JVM. I hope you will experiment with JRuby yourself and create something beautiful!
+Ruby faces many challenges these days, and we're solving them one at a time with JRuby and the JVM. I hope you will experiment with JRuby yourself and create something beautiful!
 
 ## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1jv91vy/jruby_10_part_1_whats_new/)
 
@@ -259,6 +261,7 @@ _JRuby Support and Sponsorship_
 ===============================
 
 _This is a call to action!_
+---------------------------
 
 _JRuby development is funded entirely through your generous sponsorships and the sale of commercial support contracts for JRuby developers and enterprises around the world. If you find my work exciting or believe it is important your company or your projects, please consider partnering with me to keep JRuby strong and moving forward!_
 
