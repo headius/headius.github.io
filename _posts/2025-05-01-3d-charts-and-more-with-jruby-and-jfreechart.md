@@ -253,7 +253,7 @@ JRuby is being actively developed by me and the rest of the JRuby team. We're wo
 
 So, what would you like to see next?
 
-## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1kbqh5l/creating_beautiful_charts_with_jruby_and/)
+## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1kcbthz/3d_charts_svg_and_pdf_with_jruby_and_jfreechart/)
 
 _JRuby Support and Sponsorship_
 ===============================
