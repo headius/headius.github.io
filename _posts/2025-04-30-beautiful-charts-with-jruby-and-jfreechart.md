@@ -142,9 +142,9 @@ JFreeChart provides a wide array of dataset types that can source data from a da
 
 ```ruby
 # Add values to the dataset
-bar_data.add_value 44, "Ben and Jerry's", "Flavors"
-bar_data.add_value 31, "Baskin Robbins", "Flavors"
-bar_data.add_value 11, "Cold Stone", "Flavors"
+bar_data.add_value 44, "Ben and Jerry's", "Flavors by creamery"
+bar_data.add_value 31, "Baskin Robbins", "Flavors by creamery"
+bar_data.add_value 11, "Cold Stone", "Flavors by creamery"
 ```
 
 This bar chart will display a count of ice cream flavors from three well-known purveyors of the creamery arts. The `add_value` method here is `addValue` in Java, and takes a number, a column key, and a row key.
@@ -155,7 +155,7 @@ Given our dataset, we can now request that JFreeChart create a basic bar chart f
 # Create a bar chart with default settings
 java_import org.jfree.chart.ChartFactory
 bar_chart = ChartFactory.create_bar_chart "How Many Ice Cream Flavors?",
-                                          "Flavors", "Creamery", bar_data
+                                          "Creamery", "Flavors", bar_data
 ```
 
 We import the `ChartFactory` class for convenience (which is basically equivalent to doing `ChartFactory = org.jfree.chart.ChartFactory`) and then call `create_bar_chart` to generate a bar chart with default settings. The arguments we pass are the name of the chart, the label for the X axis, and the label for the Y axis, and our dataset.
