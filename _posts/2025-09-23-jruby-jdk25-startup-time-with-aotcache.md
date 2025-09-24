@@ -387,7 +387,7 @@ What will the Ruby world be like when JRuby users can have true parallelism, wor
 
 We're about to find out.  
 
-## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1kcbthz/3d_charts_svg_and_pdf_with_jruby_and_jfreechart/)
+## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1npiavg/jruby_and_jdk_25_startup_time_with_aotcache/)
 
 _JRuby Support for Your Project_
 ================================
