@@ -30,7 +30,7 @@ layout: default
 
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
       <br>
-      <small class="date">{{ post.date}}</small>
+      <small class="date">{{ post.date | date: "%b %d, %Y" }}</small>
     </article>
   {% endfor %}
 
