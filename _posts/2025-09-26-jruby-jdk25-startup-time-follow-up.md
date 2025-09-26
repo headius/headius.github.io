@@ -16,7 +16,7 @@ Of the many OpenJDK projects I follow, Leyden has been near the top as far as ac
 
 After my recent post, [Aleksey Shipilëv](https://bsky.app/profile/shipilev.bsky.social) reached out to me on Bluesky:
 
-[![Aleksey Shipilëv Bluesky post about recent Leyden improvements](/images/aleksey_shipilëv_leyden_followup.png)](https://bsky.app/profile/shipilev.bsky.social/post/3lzm3ss3fjs22)
+[![Aleksey Shipilëv Bluesky post about recent Leyden improvements](/images/aleksey_leyden_followup.png)](https://bsky.app/profile/shipilev.bsky.social/post/3lzm3ss3fjs22)
 
 If you know Aleksey, you know to listen when he makes a suggestion. Naturally, I got to work building my own "premain" Leyden JDK build to try things out.
 
