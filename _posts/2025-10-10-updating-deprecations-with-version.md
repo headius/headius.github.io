@@ -92,7 +92,9 @@ processed core/src/main/java/org/jruby/EvalType.java
 
 Enjoy!
 
-## [Join the discussion on Reddit!](https://www.reddit.com/r/ruby/comments/1nr630x/jruby_and_leyden_even_better_startup/)
+## [Join the discussion on r/ruby!](https://www.reddit.com/r/ruby/comments/1o3eiid/updating_jrubys_deprecations_with_since_version/)
+
+## [Join the discussion on r/java!](https://www.reddit.com/r/java/comments/1o3eku0/updating_historical_deprecations_with_since/)
 
 _JRuby Support for Your Project_
 ================================
