@@ -325,6 +325,8 @@ I'm trying to do more frequent, compact blog posts, so I'm not going to get into
 * Including jar dependencies from the JVM ecosystem as part of your tool.
 * Getting around the JVM requirement: using JVM packaging tools to combine your jar with a complete runnable JVM environment.
 
+A good friend of the JRuby project – Mohit Sindhwani – also [blogged about Warbler back in 2021](https://notepad.onghu.com/2021/jruby-win-day2-creating-jar-files/). His company and many others use Warbler for commercial packaging of Ruby applications every day, ranging from simple command-line utilities all the way up to enterprise scale applications.
+
 The Warbler project just had its first major release in almost a decade, so we're currently updating it for modern JRuby, Ruby, and JVM features and requirements. There's a lot of room for cleanup and new features!
 
 If you're interested in packaging your Ruby tools for easy, secure distribution to friends, family, or customers... please give Warbler a try and let us know how we can help you!
