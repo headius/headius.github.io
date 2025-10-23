@@ -186,7 +186,9 @@ Obviously there's enormous potential for Ruby tools and applications to be packa
 
 JRuby is clearly the future of Ruby in the enterprise, and Warbler is a huge part of that. I am always here to help you build and package Ruby applications with JRuby and Warbler. Follow the links below and let's set up a chat or call to help you bring your apps to a wider world!
 
-## [Join the discussion on r/ruby!](https://www.reddit.com/r/ruby/comments/1ocje8h/packaging_ruby_apps_with_warbler_executable_jar/)
+## Join the discussion on r/ruby!
+
+<blockquote class="reddit-embed-bq" style="height:500px" data-embed-height="240"><a href="https://www.reddit.com/r/ruby/comments/1oe8mx6/warbled_sidekiq_zeroinstall_executable_for_jvm/">Warbled Sidekiq: Zero-install Executable for JVM</a><br> by<a href="https://www.reddit.com/user/headius/">u/headius</a> in<a href="https://www.reddit.com/r/ruby/">ruby</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
 
 _JRuby Support for Your Project_
 ================================
