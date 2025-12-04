@@ -114,7 +114,7 @@ What do you think?
 
 ## Join the discussion on r/java!
 
----
+<blockquote class="reddit-embed-bq" style="height:500px" data-embed-height="240"><a href="https://www.reddit.com/r/java/comments/1pdv016/nullchecking_the_fun_way_with_instanceof_patterns/">Null-checking the fun way with instanceof patterns</a><br> by<a href="https://www.reddit.com/user/headius/">u/headius</a> in<a href="https://www.reddit.com/r/java/">java</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
 
 _Keep the Hits Coming_
 ======================
