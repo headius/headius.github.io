@@ -46,7 +46,7 @@ Use the [JRuby at RubyConf 2026 form](https://forms.gle/aXphxgUsnQYrpf3H8) to pr
 JRuby Cabana
 ============
 
-On Thursday, the Headius team would like to host you at our **poolside cabana** at the Red Rock Casino Resort, host of RubyConf 2026! We'll be hanging out in the shade... talking, hacking, and relaxing between talks.
+On Thursday, the Headius team would like to host you at our **poolside cabana** at the Red Rock Casino Resort, host of RubyConf 2026! We'll be hanging out in the shade... talking, hacking, and relaxing between sessions.
 
 Let us know on the [JRuby at RubyConf 2026 form](https://forms.gle/aXphxgUsnQYrpf3H8) if you're interested in dropping by!
 
