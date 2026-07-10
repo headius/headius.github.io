@@ -43,6 +43,13 @@ We'll be hanging out to answer your questions and help onboard you to the JRuby 
 
 Use the [JRuby at RubyConf 2026 form](https://forms.gle/aXphxgUsnQYrpf3H8) to provide any information you think might help us support you.
 
+JRuby Cabana
+============
+
+On Thursday, the Headius team would like to host you at our **poolside cabana** at the Red Rock Casino Resort, host of RubyConf 2026! We'll be hanging out in the shade... talking, hacking, and relaxing between talks.
+
+Let us know on the [JRuby at RubyConf 2026 form](https://forms.gle/aXphxgUsnQYrpf3H8) if you're interested in dropping by!
+
 ## Join the discussion on r/java!
 
 <blockquote class="reddit-embed-bq" style="height:500px" data-embed-height="240"><a href="https://www.reddit.com/r/java/comments/1pdv016/nullchecking_the_fun_way_with_instanceof_patterns/">Null-checking the fun way with instanceof patterns</a><br> by<a href="https://www.reddit.com/user/headius/">u/headius</a> in<a href="https://www.reddit.com/r/java/">java</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
