@@ -50,9 +50,9 @@ On Thursday, the Headius team would like to host you at our **poolside cabana** 
 
 Let us know on the [JRuby at RubyConf 2026 form](https://forms.gle/aXphxgUsnQYrpf3H8) if you're interested in dropping by!
 
-## Join the discussion on r/java!
+## Join the discussion on r/ruby!
 
-<blockquote class="reddit-embed-bq" style="height:500px" data-embed-height="240"><a href="https://www.reddit.com/r/java/comments/1pdv016/nullchecking_the_fun_way_with_instanceof_patterns/">Null-checking the fun way with instanceof patterns</a><br> by<a href="https://www.reddit.com/user/headius/">u/headius</a> in<a href="https://www.reddit.com/r/java/">java</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+<blockquote class="reddit-embed-bq" style="height:500px" data-embed-height="240"><a href="https://www.reddit.com/r/ruby/comments/1ussn9g/jruby_at_rubyconf_2026_talk_hack_space_and_other/">JRuby at RubyConf 2026</a><br> by<a href="https://www.reddit.com/user/headius/">u/headius</a> in<a href="https://www.reddit.com/r/ruby/">ruby</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
 
 _Keep the Hits Coming_
 ======================
