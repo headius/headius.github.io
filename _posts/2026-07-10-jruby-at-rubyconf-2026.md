@@ -9,6 +9,8 @@ published: true
 
 This year marks a big milestone in my history working on JRuby: twenty years ago, [I joined Sun Microsystems](https://blog.headius.com/2006/09/jruby-steps-into-sun.html) to work on the project full-time. This month also marks another milestone for JRuby: two years being independently funded by my company [Headius Enterprises](https://headius.com/welcome/) through commercial support contracts. It's a perfect time for us to return to [RubyConf 2026](https://rubyconf.org/) and show today's Rubyists what JRuby can do for them!
 
+**Update!** After a very long time, we have a new batch of JRuby t-shirts! Limited run so only folks at the JRuby talk, hack space, or cabana can get them! Also plenty of stickers for everyone!
+
 Main JRuby Talk
 ===============
 
